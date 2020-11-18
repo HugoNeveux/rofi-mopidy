@@ -24,6 +24,7 @@ def song_to_dict(s, f):
             'albumartist': s.albumartist or s.artist,
             'album': s.album,
             # track in format like 101 if disc tag is set (handling "3 of 3")
+
             'track': int(''.join(i for i in ((s.disc or '') + s.track)
                          if i.isdigit())[-3:]),
             'title': s.title,
@@ -62,7 +63,7 @@ def collect(local_dir):
 
     musicfiles = listfiles(local_dir, ['flac', 'mp3'])
     song_objects = [(TinyTag.get(f), f) for f in musicfiles]
-    songs = [song_to_dict(s, f) for s, f in song_objects]
+    songs = [song_to_dict(s, f) for s, f in song_objects if s.track != None]
     albums = group_songs(songs)
 
     return albums
